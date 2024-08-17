@@ -1,4 +1,4 @@
-# this requires ollama webui to be running in the background. 
+# this requires ollama to be running in the background. 
 
 from langchain_community.document_loaders import TextLoader
 from langchain_community.embeddings import OllamaEmbeddings
@@ -22,8 +22,6 @@ llm = Ollama(base_url='http://localhost:11434', model="llama3.1:8b")
 
 
 # Load the document, split it into chunks, embed each chunk and load it into the vector store.
-
-# raw_documents = DirectoryLoader("/data", glob="*/*", show_progress=True, use_multithreading=True, silent_errors=False).load()
 raw_documents = load_all_docs("/data")
 
 # split the documents into chunks
@@ -31,12 +29,12 @@ text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
 texts= []
 for document in raw_documents:
     texts.append(text_splitter.split_documents(document))
-# texts = 
+
 
 # select which embeddings we want to use
 embeddings = OllamaEmbeddings(base_url='http://localhost:11434',model="llama3.1:8b")
 # create the vectorestore to use as the index
-# breakpoint()
+
 if os.path.isdir("/data/chroma_db"):
     db = Chroma(embedding_function=embeddings, persist_directory="/data/chroma_db")
 else:
@@ -50,6 +48,6 @@ qa = RetrievalQA.from_chain_type(
     llm=llm, chain_type="stuff", retriever=retriever, return_source_documents=True)
 
 
-query = "Can you summarize this the Readme.md file"
+query = "Can you summarize the Readme.md file"
 result = qa({"query": query})
 print(result)
