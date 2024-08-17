@@ -1,3 +1,5 @@
+README
+
 Working on the RAG pieces. 
 
 install ollama locally like before. 
@@ -7,5 +9,5 @@ ollama serve
 
 DATA_PATH=$PWD
 
-docker build -t ollama-rag:latest .
+docker build -t ollama-rag:latest .  
 docker run -it --network host -v $PWD:/code -v $DATA_PATH:/data ollama-rag:latest bash
